@@ -1,30 +1,53 @@
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import RequireAuth from "../utils/RequireAuth";
 import RedirectIfLoggedIn from "../utils/RedirectIfLoggedIn";
-
+import Navigation from "../components/Navigation.tsx";
+import {useEffect, useState} from "preact/compat";
+import authenticationManager from "../auth/authenticationManager.tsx";
+import authenticationDataService from "../service/authentication.service.tsx";
+import Swal from "sweetalert2";
 // unprotectedRoutes
 import {public_routes} from "./UnProtectedRoutes";
 // protectedRoutes
 import {admin_routes} from "./AdminRoutes";
 import {user_routes} from "./UserRoutes";
-import {general_routes} from "./GeneralRoutes";
-import Nav from "../pages/Nav.tsx";
+import {allRoles_routes} from "./AllRolesRoutes.tsx";
+// authenticationRoutes
 import {auth_routes} from "./AuthRoutes.tsx";
-
+import * as React from "preact/compat";
 
 const AppRoutes = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        if (!authenticationManager.isLoggedIn()) {
+            return
+        }
+        authenticationDataService.verifyAuthentication({token: authenticationManager.getToken()})
+            .then(value => {
+                console.log(value)
+                if (!value.data.authenticated) {
+                    Swal.fire('Session Expired!', "", 'warning')
+                    authenticationManager.removeLogin()
+                }else {
+                    setIsLoggedIn(true)
+                }
+            }).catch((r) => {
+            console.log(r.error.message)
+        });
+    })
     const protectedRoutes = [
         ...admin_routes,
         ...user_routes,
-        ...general_routes,
-        ...public_routes,
-        ...auth_routes
+        ...allRoles_routes,
+        ...public_routes
+
     ];
     const unprotectedRoutes = [...public_routes];
 
     return (
         <BrowserRouter>
-            <Nav></Nav>
+            <Navigation isLoggedIn={isLoggedIn}/>
             <Routes>
                 {
                     unprotectedRoutes.map((e) => {
@@ -32,7 +55,7 @@ const AppRoutes = () => {
                             <Route
                                 key={e.path}
                                 path={e.path}
-                                element={e.ele}
+                                element={React.cloneElement(e.ele, {setIsLoggedIn})}
                             />
                         );
                     })
@@ -45,7 +68,7 @@ const AppRoutes = () => {
                                 path={e.path}
                                 element={
                                     <RedirectIfLoggedIn>
-                                        {e.ele}
+                                        {React.cloneElement(e.ele, {setIsLoggedIn})}
                                     </RedirectIfLoggedIn>
                                 }
                                 // element={e.ele}

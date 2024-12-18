@@ -8,7 +8,6 @@ const RequireAuth = (children: any) => {
     const location = useLocation();
 
     if (!authenticationManager.isLoggedIn()) {
-        console.log("RequireAuth: not logged in")
         return <Navigate to="/login" state={{path: location.pathname}}/>
     }
 
@@ -16,14 +15,9 @@ const RequireAuth = (children: any) => {
     currentUserRole = user.currentUserRole
 
     if (currentUserRole) {
-        console.log("currentUserRole: " + currentUserRole)
 
         if (children.userroles) {
-            console.log("location")
-            console.log(location)
-            console.log("roles")
-            console.log(children.userroles)
-            if (children.userroles.length === 0 || children.userroles.includes(currentUserRole)) {
+            if (children.userroles.includes(currentUserRole)) {
                 return children.children
             } else {
                 Swal.fire('Access Denied !', "", 'warning')

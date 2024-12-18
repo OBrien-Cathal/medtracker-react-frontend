@@ -3,7 +3,7 @@ import {useNavigate} from 'react-router-dom'
 import authenticationDataService from "../service/authentication.service.tsx"
 import authenticationManager from "../auth/authenticationManager.tsx";
 
-const Login = () => {
+const Login = (props:any) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [usernameError, setUsernameError] = useState('')
@@ -26,6 +26,7 @@ const Login = () => {
         authenticationDataService.signIn({username: username, password: password})
             .then((r) => {
                 if (authenticationManager.handleAndValidateIAuthenticationResponse(r.data, username)) {
+                    props.setIsLoggedIn(true)
                     navigate('/home')
                 } else {
                     window.alert('Wrong email or password')
@@ -39,6 +40,7 @@ const Login = () => {
         authenticationDataService.signUp({username: username, password: password})
             .then((r) => {
                 if (authenticationManager.handleAndValidateIAuthenticationResponse(r.data, username)) {
+                    props.setIsLoggedIn(true)
                     navigate('/home')
                 } else {
                     window.alert('Sign Up Failed!')

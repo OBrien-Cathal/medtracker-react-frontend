@@ -5,7 +5,7 @@ class AuthenticationManager {
     private _user: IAuthenticatedUser = AuthenticationManager.defaultAuthenticatedUser()
 
     static defaultAuthenticatedUser(): IAuthenticatedUser {
-        return {username: "", token: "", currentUserRole: ""}
+        return {username: "", token: "", currentUserRole: "ANON"}
     }
 
     public getLoggedInUser(): IAuthenticatedUser {
@@ -37,7 +37,7 @@ class AuthenticationManager {
 
     private userIsDefault(): boolean {
         if (this._user.username === '') this.setUserFromSessionStorage()
-        return this._user.username === '' && this._user.token === '' && this._user.currentUserRole === ''
+        return this._user.currentUserRole === "ANON"
     }
 
     public isLoggedIn(): boolean {

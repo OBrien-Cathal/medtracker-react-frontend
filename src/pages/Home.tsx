@@ -3,30 +3,27 @@ import {useState} from "preact/compat";
 
 import authenticationManager from "../auth/authenticationManager";
 
-const Home = () => {
-    const [loggedIn, setLoggedIn] = useState(false)
+const Home = (props:any) => {
+    const [loggedIn, setLoggedIn] = useState(props.isLoggedIn)
     const [username, setUsername] = useState('')
     const navigate = useNavigate()
-
-    console.log("on home page")
 
     let currentUser = authenticationManager.getLoggedInUser()
 
     if (authenticationManager.isLoggedIn()) {
-        console.log("local user found")
+
         setUsername(currentUser.username)
         setLoggedIn(true)
     }
 
     const onButtonClick = () => {
         if (loggedIn) {
-            console.log("Logged in button click")
             authenticationManager.removeLogin()
+            props.setIsLoggedIn(false)
             setLoggedIn(false)
             setUsername('')
 
         } else {
-            console.log("Logged OUT button click")
             navigate('/login')
         }
     }
