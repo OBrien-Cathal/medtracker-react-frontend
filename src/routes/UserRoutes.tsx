@@ -4,6 +4,8 @@ export const user_routes = [
     {
         path: "/upload",
         ele: <Upload />,
-        availability: [ur.user]
+        availability: [ur.user],
+        title: "Upload",
+        showInNav: true
     }
 ]

@@ -15,6 +15,7 @@ import {allRoles_routes} from "./AllRolesRoutes.tsx";
 // authenticationRoutes
 import {auth_routes} from "./AuthRoutes.tsx";
 import * as React from "preact/compat";
+import HeaderContainer from "../components/HeaderContainer"
 
 const AppRoutes = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -29,7 +30,7 @@ const AppRoutes = () => {
                 if (!value.data.authenticated) {
                     Swal.fire('Session Expired!', "", 'warning')
                     authenticationManager.removeLogin()
-                }else {
+                } else {
                     setIsLoggedIn(true)
                 }
             }).catch((r) => {
@@ -47,7 +48,9 @@ const AppRoutes = () => {
 
     return (
         <BrowserRouter>
-            <Navigation isLoggedIn={isLoggedIn}/>
+            <HeaderContainer isLoggedIn={isLoggedIn}>
+                <Navigation isLoggedIn={isLoggedIn}/>
+            </HeaderContainer>
             <Routes>
                 {
                     unprotectedRoutes.map((e) => {

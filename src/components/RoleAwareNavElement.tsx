@@ -1,16 +1,14 @@
-import authenticationManager from "../auth/authenticationManager.tsx";
 import {NavLink} from "react-router-dom";
 
 const RoleAwareNavElement = (props: any) => {
-    const pathAllowedForRole = props.route.availability
-        .includes(authenticationManager.getLoggedInUser().currentUserRole);
 
-    console.log(props.route)
-    if ( pathAllowedForRole) {
+    if (props.route.showInNav && props.route.availability
+        .includes(props.currentUserRole)) {
         return (
             <div className="NavElement">
-                {<NavLink to={props.route.path}>{props.route.path}</NavLink>}
+                {<NavLink to={props.route.path}>{props.route.title}</NavLink>}
             </div>
+
         )
     } else {
         return ''

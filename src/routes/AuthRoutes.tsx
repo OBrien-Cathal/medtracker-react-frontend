@@ -5,11 +5,15 @@ export const auth_routes = [
     {
         path: "/",
         ele: <Login></Login>,
-        availability: []
+        availability: [],
+        title: "Login",
+        showInNav: false
     },
     {
         path: "/login",
         ele: <Login></Login>,
-        availability: []
+        availability: [],
+        title: "Login",
+        showInNav: false
     }
 ]

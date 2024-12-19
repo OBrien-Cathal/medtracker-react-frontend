@@ -8,11 +8,15 @@ export const public_routes = [
     {
         path: "/home",
         ele: <Home></Home>,
-        availability: availableToAll
+        availability: availableToAll,
+        title: "Home",
+        showInNav: true
     },
     {
         path: "/about",
         ele: <AboutPage></AboutPage>,
-        availability: availableToAll
+        availability: availableToAll,
+        title: "About",
+        showInNav: true
     },
 ]
